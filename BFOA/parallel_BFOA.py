@@ -8,11 +8,11 @@ import copy
 from fastaReader import fastaReader
 
 if __name__ == "__main__":
-    numeroDeBacterias = 4
-    numRandomBacteria = 1
-    iteraciones = 3
-    tumbo = 2                                             #numero de gaps a insertar 
-    nado = 3
+    numeroDeBacterias = 15 #Modificación de NumBacterias a 15
+    numRandomBacteria = 3 #Se modifica a 3 para el análisis de resultados
+    iteraciones = 8  #Modificación de iteraciones a 8
+    tumbo = 6 #numero de gaps a insertar 6
+    nado = 5  #numero de nados a realizar 3
     secuencias = list()
     
     secuencias = fastaReader().seqs
@@ -21,11 +21,11 @@ if __name__ == "__main__":
     for i in range(len(secuencias)):
         #elimina saltos de linea
         secuencias[i] = list(secuencias[i])
-    globalNFE = 0                            #numero de evaluaciones de la funcion objetivo
-    dAttr= 0.1 #0.1
-    wAttr= 0.002 #0.2
+    globalNFE = 0 #numero de evaluaciones de la funcion objetivo
+    dAttr= 0.3 #0.1 Se aumenta el valor de dAttr para aumentar la atracción
+    wAttr= 0.005 #0.2 anteriormente estaba en 0.002 Se reduce el valor de wAttr para aumentar la atracción
     hRep=dAttr
-    wRep= .001    #10
+    wRep= .002  #0.001 10 se ajusta a 0.002
     
     manager = Manager()
     numSec = len(secuencias)
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     veryBest = [None, None, None] #indice, fitness, secuencias
     
     #registra el tiempo de inicio
-    start_time = time.time()
+    start_time = time.time() 
     
     print("poblacion inicial ...")
     poblacionInicial() 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         operadorBacterial.replaceWorst(poblacion, veryBest[0])
         operadorBacterial.resetListas(numeroDeBacterias)
 
-    print("Very Best: ", veryBest)
+    #print("Very Best: ", veryBest)
     #imprime el tiempo de ejecucion
     print("--- %s seconds ---" % (time.time() - start_time))
 
