@@ -1,21 +1,15 @@
 import numpy
-from multiprocessing import Manager
 
 class fastaReader():
-    
-
-    def __init__(self):
-        self.path = "C:\\secuenciasBFOA\\multiFasta.fasta"
-        
-        self.seqs = list()
-        self.names = list()
+    def __init__(self, path):
+        self.path = path
+        self.seqs = []
+        self.names = []
         self.read()
     
-    
     def read(self):
-        f = open(self.path, "r")
-        lines = f.readlines()
-        f.close()
+        with open(self.path, "r") as f:
+            lines = f.readlines()
         seq = ""
         for line in lines:
             if line[0] == ">":
@@ -26,6 +20,4 @@ class fastaReader():
             else:
                 seq += line.strip()
         self.seqs.append(seq)
-    
-    
-    
+        self.seqs = numpy.array(self.seqs)
