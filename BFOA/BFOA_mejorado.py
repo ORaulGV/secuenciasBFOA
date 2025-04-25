@@ -1,7 +1,8 @@
 from bacteria import bacteria
-from chemiotaxis import chemiotaxis
-import numpy
+from quimiotaxis import quimiotaxis
 from multiprocessing import Pool
+from registroDesempeño import RegistroCSV
+import numpy
 import copy
 import time
 
@@ -43,11 +44,11 @@ if __name__ == '__main__':
     wAttr = 0.2
     hRep = dAttr
     wRep = 10
-    chemio = chemiotaxis()
+    quimio = quimiotaxis()
     veryBest = bacteria(path)
     original = bacteria(path)
     globalNFE = 0
-
+    registro = RegistroCSV()
 
 
     # Inicializar la población de bacterias
@@ -70,8 +71,8 @@ if __name__ == '__main__':
             poblacion = pool.map(evaluar_bacteria, args)
 
         # Actualizar la población con los resultados de la evaluación
-        chemio.doChemioTaxis(poblacion, dAttr_iter, wAttr_iter, hRep_iter, wRep_iter)
-        globalNFE += chemio.parcialNFE
+        quimio.doQuimioTaxis(poblacion, dAttr_iter, wAttr_iter, hRep_iter, wRep_iter)
+        globalNFE += quimio.parcialNFE
         best = max(poblacion, key=lambda x: x.fitness)
 
         # Actualizar el mejor individuo encontrado hasta ahora
@@ -79,15 +80,19 @@ if __name__ == '__main__':
             clonarBest(veryBest, best)
         
         # Imprimir información de la iteración
+        tiempo = round(time.time() - registro.inicio_tiempo, 4)
         print(f"Iteración {iteracion} | BEST: {poblacion.index(best)} | "
             f"Fitness: {best.fitness:.4f} | Blosum: {best.blosumScore} | "
-            f"Interacción: {best.interaction:.4f} | NFE: {globalNFE}")
+            f"Interacción: {best.interaction:.4f} | NFE: {globalNFE} | Tiempo: {tiempo} seg")
 
-                
+        # Guardar información en el registro CSV
+        registro.guardar(iteracion, poblacion.index(best), best.fitness, best.blosumScore, best.interaction, globalNFE)
+        
+        
         # Clonación y eliminación de bacterias
         eliminar_porcentaje = 0.5 - (0.3 * factor)
-        chemio.eliminarClonar(path, poblacion)
-        chemio.insertRamdomBacterias(path, numRandomBacteria, poblacion)
+        quimio.eliminarClonar(path, poblacion)
+        quimio.insertRamdomBacterias(path, numRandomBacteria, poblacion)
 
         print("Población:", len(poblacion))
         

@@ -4,7 +4,7 @@ import numpy as np
 from bacteria import bacteria
 
 
-class chemiotaxis():
+class quimiotaxis():
     def __init__(self):
        self.parcialNFE = 0  
     
@@ -20,16 +20,16 @@ class chemiotaxis():
       return attract + repel   #interaction
     
     
-    def chemio(self, bacteria, poblacion, d_attr, w_attr, h_rep, w_rep):
+    def quimio(self, bacteria, poblacion, d_attr, w_attr, h_rep, w_rep):
       bacteria.interaction = self.attract_repel(bacteria, poblacion, d_attr, w_attr, h_rep, w_rep)
       bacteria.fitness = bacteria.blosumScore + bacteria.interaction
       
 
     
-    def doChemioTaxis(self, poblacion, d_attr, w_attr, h_rep, w_rep):
+    def doQuimioTaxis(self, poblacion, d_attr, w_attr, h_rep, w_rep):
       self.parcialNFE = 0
       for bacteria in poblacion:
-        self.chemio(bacteria, poblacion, d_attr, w_attr, h_rep, w_rep)
+        self.quimio(bacteria, poblacion, d_attr, w_attr, h_rep, w_rep)
         self.parcialNFE += bacteria.NFE
         bacteria.NFE = 0
         
@@ -55,8 +55,6 @@ class chemiotaxis():
          poblacionClones.append(newBacteria)
        return poblacionClones
 
-    
-         
     def randomBacteria(self, path):
        bact = bacteria(path)
        bact.tumboNado(random.randint(1, 10))
